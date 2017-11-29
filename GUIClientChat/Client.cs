@@ -40,6 +40,8 @@ namespace GUIClientChat
 
                 Thread dataThread = new Thread(new ThreadStart(recieveMessage));
                 dataThread.Start();
+                dataThread.IsBackground = true;
+
                 form.richTextBox1.Text = String.Format("Session is started ... \nYOUR NICK: {0}", userName);
             }
             catch (Exception e)
@@ -54,9 +56,16 @@ namespace GUIClientChat
         public void sendMessage()
         {
             string msg = form.textBox2.Text;
-            if (!(msg.Replace(" ", string.Empty).Equals("") || (msg == null))) {
-                byte[] msgBytes = Encoding.Unicode.GetBytes(msg);
-                stream.Write(msgBytes, 0, msgBytes.Length);
+            try
+            {
+                if (!(msg.Replace(" ", string.Empty).Equals("") || (msg == null)))
+                {
+                    byte[] msgBytes = Encoding.Unicode.GetBytes(msg);
+                    stream.Write(msgBytes, 0, msgBytes.Length);
+                }
+            } catch
+            {
+                form.richTextBox1.Text = "Server is unavailable. Please try again";
             }
         }
 
@@ -81,8 +90,8 @@ namespace GUIClientChat
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error. Connection faild");
-                    disconnect();
+                    //Console.WriteLine("Error. Connection faild");
+                    //disconnect();
                 }
             }
         }
@@ -93,10 +102,9 @@ namespace GUIClientChat
             if (client != null) client.Close();
         }
 
-        void disconnect()
+        public void disconnect()
         {
-            if (stream != null) stream.Close();
-            if (client != null) client.Close();
+            disconnectForCurrentClient();
             Environment.Exit(0);
         }
     }

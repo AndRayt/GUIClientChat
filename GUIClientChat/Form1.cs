@@ -14,7 +14,7 @@ namespace GUIClientChat
     {
         private const string IP = "127.0.0.1";
         private const int PORT = 8000;
-        Client client;
+        Client client = null;
 
         public Form1()
         {
@@ -23,7 +23,7 @@ namespace GUIClientChat
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -31,6 +31,7 @@ namespace GUIClientChat
             if (client != null)
             {
                 client.sendMessage();
+                textBox2.Clear();
             }
         }
 
@@ -50,6 +51,11 @@ namespace GUIClientChat
                 client = new Client(userName, IP, PORT, this);
                 client.start();
             }
+        }
+
+        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            client.disconnect();
         }
     }
 }

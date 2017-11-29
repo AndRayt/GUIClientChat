@@ -51,7 +51,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.ShortcutsEnabled = false;
-            this.richTextBox1.Size = new System.Drawing.Size(492, 320);
+            this.richTextBox1.Size = new System.Drawing.Size(492, 326);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.TabStop = false;
             this.richTextBox1.Text = "";
@@ -67,7 +67,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(2, 356);
+            this.textBox2.Location = new System.Drawing.Point(2, 358);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(411, 22);
             this.textBox2.TabIndex = 4;
@@ -95,9 +95,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(419, 356);
+            this.button2.Location = new System.Drawing.Point(419, 355);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(75, 29);
             this.button2.TabIndex = 7;
             this.button2.Text = "SEND";
             this.button2.UseVisualStyleBackColor = true;
@@ -126,6 +126,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.textBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.Text = "Chat";
             this.Load += new System.EventHandler(this.Form1_Load);
