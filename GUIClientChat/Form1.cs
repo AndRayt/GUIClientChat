@@ -35,6 +35,14 @@ namespace GUIClientChat
             }
         }
 
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                button2_Click_1(sender, e);
+            }
+        }
+
         private void button1_Click_1(object sender, EventArgs e)
         {
             string userName = textBox1.Text;
@@ -50,6 +58,14 @@ namespace GUIClientChat
                 }
                 client = new Client(userName, IP, PORT, this);
                 client.start();
+            }
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                button1_Click_1(sender, e);
             }
         }
 
