@@ -88,50 +88,59 @@ namespace GUIClientChat
                         msgSB.Append(Encoding.Unicode.GetString(msgBytes, 0, bytes));
                     } while (stream.DataAvailable);
 
-                    //записываем текст
-                    form.Invoke(new Action(() => {
+                    //вывод списка пользователей
+                    if (msgSB[0] == '#')
+                    {
+                        msgSB.Remove(0, 1);
+                        form.Invoke(new Action(() => form.richTextBox2.Text = msgSB.ToString()));
+                    }
+                    else
+                    {
+                        //записываем текст
+                        form.Invoke(new Action(() => {
 
-                        string msg = msgSB.ToString();
+                            string msg = msgSB.ToString();
 
-                        if (msg[msg.Length - 1] == '#')
-                        {
-                            isRed = true;
-                            msg = msg.Substring(0, msg.Length - 1);
-                        }
+                            if (msg[msg.Length - 1] == '#')
+                            {
+                                isRed = true;
+                                msg = msg.Substring(0, msg.Length - 1);
+                            }
 
-                        if (!(form.richTextBox1.Text[form.richTextBox1.Text.Length - 1] == '\n'))
-                            form.richTextBox1.AppendText("\n");
-                        form.richTextBox1.AppendText(msg);
+                            if (!(form.richTextBox1.Text[form.richTextBox1.Text.Length - 1] == '\n'))
+                                form.richTextBox1.AppendText("\n");
+                            form.richTextBox1.AppendText(msg);
 
-                        //окрашиваем ники в зеленый
-                        foreach (string line in form.richTextBox1.Lines.Skip(2))
-                        {
-                            form.richTextBox1.SelectionStart = form.richTextBox1.Text.LastIndexOf(line);
-                            form.richTextBox1.SelectionLength = line.Split(':')[0].Length;
-                            form.richTextBox1.SelectionColor = System.Drawing.Color.Green;
-                        }
-                        // убираем выделение
-                        form.richTextBox1.SelectionLength = 0;
-                        // ставим курсор после последнего символа
-                        form.richTextBox1.SelectionStart = form.richTextBox1.Text.Length;
-
-                        //проверяем нужно ли окрасить сообщение в карсный цвет
-                        if (isRed)
-                        {
-                            //выделяем текст
-                            string prevLine = form.richTextBox1.Lines[form.richTextBox1.Lines.Length - 1];
-                            form.richTextBox1.SelectionStart = form.richTextBox1.Text.LastIndexOf(prevLine);
-                            form.richTextBox1.SelectionLength = prevLine.Length;
-                            //меняем цвет
-                            form.richTextBox1.SelectionColor = System.Drawing.Color.Red;
+                            //окрашиваем ники в зеленый
+                            foreach (string line in form.richTextBox1.Lines.Skip(2))
+                            {
+                                form.richTextBox1.SelectionStart = form.richTextBox1.Text.LastIndexOf(line);
+                                form.richTextBox1.SelectionLength = line.Split(':')[0].Length;
+                                form.richTextBox1.SelectionColor = System.Drawing.Color.Green;
+                            }
                             // убираем выделение
                             form.richTextBox1.SelectionLength = 0;
                             // ставим курсор после последнего символа
                             form.richTextBox1.SelectionStart = form.richTextBox1.Text.Length;
-                            form.richTextBox1.SelectionColor = System.Drawing.Color.Black;
-                            isRed = false;
-                        }
-                    }));
+
+                            //проверяем нужно ли окрасить сообщение в карсный цвет
+                            if (isRed)
+                            {
+                                //выделяем текст
+                                string prevLine = form.richTextBox1.Lines[form.richTextBox1.Lines.Length - 1];
+                                form.richTextBox1.SelectionStart = form.richTextBox1.Text.LastIndexOf(prevLine);
+                                form.richTextBox1.SelectionLength = prevLine.Length;
+                                //меняем цвет
+                                form.richTextBox1.SelectionColor = System.Drawing.Color.Red;
+                                // убираем выделение
+                                form.richTextBox1.SelectionLength = 0;
+                                // ставим курсор после последнего символа
+                                form.richTextBox1.SelectionStart = form.richTextBox1.Text.Length;
+                                form.richTextBox1.SelectionColor = System.Drawing.Color.Black;
+                                isRed = false;
+                            }
+                        }));
+                    }
                 }
                 catch (Exception e)
                 {
