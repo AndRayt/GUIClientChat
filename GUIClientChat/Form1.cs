@@ -30,7 +30,7 @@ namespace GUIClientChat
         {
             if (client != null)
             {
-                client.sendMessage();
+                client.SendMessage();
                 textBox2.Clear();
             }
         }
@@ -54,10 +54,10 @@ namespace GUIClientChat
             {
                 if (client != null)
                 {
-                    client.disconnectForCurrentClient();
+                    client.DisconnectForCurrentClient();
                 }
                 client = new Client(userName, IP, PORT, this);
-                client.start();
+                client.Start();
             }
         }
 
@@ -71,7 +71,7 @@ namespace GUIClientChat
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            client.disconnect();
+            client.Disconnect();
         }
     }
 }

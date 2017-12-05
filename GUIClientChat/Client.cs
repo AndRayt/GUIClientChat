@@ -25,7 +25,7 @@ namespace GUIClientChat
             this.PORT = PORT;
         }
 
-        public void start()
+        public void Start()
         {
             client = new TcpClient();
             try
@@ -38,7 +38,7 @@ namespace GUIClientChat
                 byte[] msgBytes = Encoding.Unicode.GetBytes(userName);
                 stream.Write(msgBytes, 0, msgBytes.Length);
 
-                Thread dataThread = new Thread(new ThreadStart(recieveMessage));
+                Thread dataThread = new Thread(new ThreadStart(RecieveMessage));
                 dataThread.Start();
                 dataThread.IsBackground = true;
 
@@ -47,13 +47,13 @@ namespace GUIClientChat
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                disconnect();
+                Disconnect();
             }
         }
       
 
         //Отправка сообщений (происходит в главном потоке)
-        public void sendMessage()
+        public void SendMessage()
         {
             string msg = form.textBox2.Text;
             try
@@ -70,7 +70,7 @@ namespace GUIClientChat
         }
 
         //Прием сообщений (происходит в дополнительном потоке)
-        void recieveMessage()
+        void RecieveMessage()
         {
             while (client.Connected)
             {
@@ -96,15 +96,15 @@ namespace GUIClientChat
             }
         }
 
-        public void disconnectForCurrentClient()
+        public void DisconnectForCurrentClient()
         {
             if (stream != null) stream.Close();
             if (client != null) client.Close();
         }
 
-        public void disconnect()
+        public void Disconnect()
         {
-            disconnectForCurrentClient();
+            DisconnectForCurrentClient();
             Environment.Exit(0);
         }
     }
