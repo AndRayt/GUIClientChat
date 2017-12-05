@@ -46,12 +46,12 @@ namespace GUIClientChat
         private void button1_Click_1(object sender, EventArgs e)
         {
             string userName = textBox1.Text;
-            label3.Text = userName;
-
+            
             //удаляем все пробелы
             userName = userName.Replace(" ", string.Empty);
             if (!(userName.Equals("") || userName == null))
             {
+                label3.Text = userName;
                 if (client != null)
                 {
                     client.DisconnectForCurrentClient();

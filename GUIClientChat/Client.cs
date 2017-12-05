@@ -47,7 +47,8 @@ namespace GUIClientChat
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Disconnect();
+                form.richTextBox1.Text = "Server is unavailable. Please try again later";
+                //Disconnect();
             }
         }
       
@@ -65,31 +66,76 @@ namespace GUIClientChat
                 }
             } catch
             {
-                form.richTextBox1.Text = "Server is unavailable. Please try again";
+                form.richTextBox1.Text = "Server is unavailable. Please try again later";
             }
         }
 
         //Прием сообщений (происходит в дополнительном потоке)
         void RecieveMessage()
         {
+            bool isRed = false;
             while (client.Connected)
             {
                 try
                 {
                     byte[] msgBytes = new byte[128];
-                    StringBuilder msg = new StringBuilder();
+                    StringBuilder msgSB = new StringBuilder();
                     int bytes = 0;
 
                     do
                     {
                         bytes = stream.Read(msgBytes, 0, msgBytes.Length);
-                        msg.Append(Encoding.Unicode.GetString(msgBytes, 0, bytes));
+                        msgSB.Append(Encoding.Unicode.GetString(msgBytes, 0, bytes));
                     } while (stream.DataAvailable);
 
-                    form.Invoke(new Action(() => form.richTextBox1.Text = form.richTextBox1.Text + "\n" + msg.ToString()));
+                    //записываем текст
+                    form.Invoke(new Action(() => {
+
+                        string msg = msgSB.ToString();
+
+                        if (msg[msg.Length - 1] == '#')
+                        {
+                            isRed = true;
+                            msg = msg.Substring(0, msg.Length - 1);
+                        }
+
+                        if (!(form.richTextBox1.Text[form.richTextBox1.Text.Length - 1] == '\n'))
+                            form.richTextBox1.AppendText("\n");
+                        form.richTextBox1.AppendText(msg);
+
+                        //окрашиваем ники в зеленый
+                        foreach (string line in form.richTextBox1.Lines.Skip(2))
+                        {
+                            form.richTextBox1.SelectionStart = form.richTextBox1.Text.LastIndexOf(line);
+                            form.richTextBox1.SelectionLength = line.Split(':')[0].Length;
+                            form.richTextBox1.SelectionColor = System.Drawing.Color.Green;
+                        }
+                        // убираем выделение
+                        form.richTextBox1.SelectionLength = 0;
+                        // ставим курсор после последнего символа
+                        form.richTextBox1.SelectionStart = form.richTextBox1.Text.Length;
+
+                        //проверяем нужно ли окрасить сообщение в карсный цвет
+                        if (isRed)
+                        {
+                            //выделяем текст
+                            string prevLine = form.richTextBox1.Lines[form.richTextBox1.Lines.Length - 1];
+                            form.richTextBox1.SelectionStart = form.richTextBox1.Text.LastIndexOf(prevLine);
+                            form.richTextBox1.SelectionLength = prevLine.Length;
+                            //меняем цвет
+                            form.richTextBox1.SelectionColor = System.Drawing.Color.Red;
+                            // убираем выделение
+                            form.richTextBox1.SelectionLength = 0;
+                            // ставим курсор после последнего символа
+                            form.richTextBox1.SelectionStart = form.richTextBox1.Text.Length;
+                            form.richTextBox1.SelectionColor = System.Drawing.Color.Black;
+                            isRed = false;
+                        }
+                    }));
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     //Console.WriteLine("Error. Connection faild");
                     //disconnect();
                 }
